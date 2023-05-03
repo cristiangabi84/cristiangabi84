@@ -1,0 +1,68 @@
+/*DDL (Data definition language) reprezinta comenzi SQL folosite pentru a creea, modifica, si sterge structuri ale bazei de date- create, drop, alter, truncate, comment, rename*/
+create database usermanagement;
+/*activam cu dubluclick baza de date usermanagement*/
+create table employee(
+UserRole varchar(5) not null,
+EmployeeName varchar(25) not null,
+Username varchar(25) not null,
+Status varchar(25) not null,
+Password varchar(25) not null
+);
+/*schimbam numele tabelei*/
+alter table employee rename to users;
+/*sterge toate inregistrarile*/
+truncate table users;
+/*sterge tabelul users*/
+drop table users;
+
+/*DML (Data manipulation language) reprezinta comenzi utilizate pentru a manipula datele (informatiile) din baza de date - insert, update, delete, lock*/
+/*creez tabelul users cu cheie primara  UserId si secundara  JobTitleId*/
+create table users(
+UserId int primary key not null auto_increment,
+UserRole varchar(5) not null,
+EmployeeName varchar(25) not null,
+Username varchar(25) not null,
+Status varchar(25) not null,
+Password varchar(25) not null,
+JobTitleId int not null,
+constraint fk_JobTitles_users foreign key (JobTitleId) references Jobtitles (JobTitleId)
+);
+/*adaugam date in tabel*/
+insert into users (UserRole, EmployeeName, Username, Status, Password, JobTitleId)
+values 
+('admin', 'Ecaterina Teodoroiu', 'Rina', 'Enabled', '14011984', 3),
+('admin', 'Adam Black', 'Adam', 'Enabled', 'newworld', 3),
+('ESS', 'Johnny Bravo', 'Bravo', 'Enabled', 'JBest2023', 4),
+('ESS', 'Jennifer Anais', 'Jenny', 'Enabled', 'Jennylove', 5),
+('ESS', 'Julia Sunday', 'Sunny', 'Enabled', 'Sunny2000', 4),
+('ESS', 'Bianca Anton', 'Bibi', 'Enabled', 'Antony', 6),
+('ESS', 'Anna Antonescu', 'Anna', 'Enabled', 'annaa95', 5),
+('ESS', 'John Smith', 'jsmith', 'Enabled', 'johnny77', 4),
+('ESS', 'Kevin Bacon', 'KeyB', 'Enabled', 'artist1958', 9),
+('ESS', 'Kevin Ryan', 'kryan', 'Enabled', 'borntobewild90', 10);
+
+/*DQL (Data query language) include comanda -select- care este utilizata pentru a extrage (afisa) informatiile din baza de date*/
+/*afiseaza randul de la numele Kevin Bacon*/
+select * from users where EmployeeName in ('Kevin Bacon');
+/*afiseaza administratorii*/
+select * from users where UserRole in ('Admin');
+/*afiseaza pe cei al caror nume incepe cu j*/
+select * from users where EmployeeName like 'j%';
+/*afiseaza administratorii al caror nume incepe cu litera E*/
+select * from users where UserRole like ('admin') and EmployeeName like ('e%');
+
+/*tabelul jobs*/
+create table JobTitles(
+JobTitleId int primary key not null auto_increment,
+JobTitle varchar(25) not null,
+JobDescription varchar(200),
+JobSpecification varchar(25),
+Note varchar(200)
+);
+insert into JobTitles (JobTitle)
+values ('Accountant'), ('Audit Trainee'), ('Cheif Executive Office'), ('Controller'), ('Finance Manager'), ('Accountant'), ('QA Automation'), ('Full Stack Developer'), ('Designer'), ('Java developer');
+select * from JobTitles;
+
+/*Afisam cele doua tabele compuse astfel incat sa vedem ce job are fiecare*/
+select * from users inner join JobTitles on users.jobtitleid = Jobtitles.jobtitleid;
+
